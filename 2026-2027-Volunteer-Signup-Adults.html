@@ -1,0 +1,1052 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Trail Life MN-9871 — Adult Volunteer Roles 2026-2027</title>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
+  <style>
+    :root {
+      --green-dark: #1B4D3E;
+      --green-mid: #2D6A4F;
+      --green-light: #52B788;
+      --gold: #C9A227;
+      --gold-light: #FEF3C7;
+      --gold-border: #D4A017;
+      --bg: #F4F1EC;
+      --card-bg: #FFFFFF;
+      --card-border: #DDD8D0;
+      --text: #1A1A1A;
+      --text-muted: #6B6860;
+      --filled-bg: #ECFDF5;
+      --filled-border: #10B981;
+      --filled-gold-bg: #FFFBEB;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; }
+
+    /* HEADER */
+    .header { background: var(--green-dark); color: white; padding: 28px 20px 20px; text-align: center; }
+    .header .troop { font-size: 0.75rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.14em; opacity: 0.7; margin-bottom: 6px; }
+    .header h1 { font-size: 1.5rem; font-weight: 800; line-height: 1.2; }
+    .header p { font-size: 0.88rem; opacity: 0.8; margin-top: 6px; }
+
+    /* PROGRESS */
+    .progress-bar { background: var(--green-mid); padding: 18px 20px; text-align: center; }
+    .progress-count { color: white; font-size: 1.08rem; font-weight: 700; margin-bottom: 10px; }
+    .bar-track { background: rgba(255,255,255,0.25); border-radius: 999px; height: 10px; max-width: 480px; margin: 0 auto; }
+    .bar-fill { background: var(--gold); height: 100%; border-radius: 999px; transition: width 0.6s ease; width: 0%; }
+    .live-indicator { display: inline-flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.8); font-size: 0.75rem; margin-top: 6px; }
+    .live-dot { width: 7px; height: 7px; background: #6EE7B7; border-radius: 50%; animation: blink 2s infinite; }
+    @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
+
+    /* PAGE NAV */
+    .page-nav { background: #143D30; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 10px 20px; }
+    .page-nav-btn { display: inline-flex; align-items: center; gap: 6px; background: var(--gold); color: #1A1A1A; font-size: 0.8rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.08em; padding: 7px 18px; border-radius: 999px; text-decoration: none; transition: opacity 0.2s; }
+    .page-nav-btn:hover { opacity: 0.85; }
+    .page-nav-label { color: rgba(255,255,255,0.55); font-size: 0.78rem; }
+
+    /* GRID */
+    .grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(270px, 1fr)); gap: 14px; padding: 20px; max-width: 1100px; margin: 0 auto; }
+
+    /* CARDS */
+    .card { background: var(--card-bg); border: 2px solid var(--card-border); border-radius: 12px; padding: 18px; cursor: pointer; transition: transform 0.2s, box-shadow 0.2s, border-color 0.3s, background 0.3s; position: relative; }
+    .card:hover { transform: translateY(-2px); box-shadow: 0 6px 20px rgba(0,0,0,0.1); }
+    .card.leadership { border-color: var(--gold); }
+    .card.filled { background: var(--filled-bg); border-color: var(--filled-border); cursor: default; }
+    .card.filled:hover { transform: none; box-shadow: none; }
+    .card.leadership.filled { background: var(--filled-gold-bg); border-color: var(--gold-border); }
+
+    .card-check { position: absolute; top: 14px; right: 14px; width: 26px; height: 26px; background: var(--filled-border); border-radius: 50%; display: flex; align-items: center; justify-content: center; color: white; font-size: 13px; font-weight: 700; }
+    .card.leadership .card-check { background: var(--gold); color: #1A1A1A; }
+
+    .card-badge { display: inline-block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; padding: 3px 8px; border-radius: 999px; margin-bottom: 10px; }
+    .badge-open { background: #F3F4F6; color: #6B7280; }
+    .badge-leadership { background: var(--gold-light); color: #92400E; }
+    .badge-filled { background: #D1FAE5; color: #065F46; }
+    .badge-leadership-filled { background: var(--gold-light); color: #92400E; }
+
+    .card h3 { font-size: 1rem; font-weight: 700; color: var(--text); margin-bottom: 5px; }
+    .card .subtitle { font-size: 0.8rem; color: var(--text-muted); line-height: 1.45; margin-bottom: 12px; }
+    .card .time-tag { font-size: 0.76rem; color: var(--text-muted); }
+    .card .time-tag strong { color: var(--green-mid); }
+    .card .filled-by { margin-top: 10px; font-size: 0.8rem; color: #065F46; font-weight: 600; }
+
+    /* OVERLAY */
+    .overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 200; overflow-y: auto; padding: 16px; align-items: flex-start; justify-content: center; }
+    .overlay.open { display: flex; }
+
+    /* MODAL */
+    .modal { background: white; border-radius: 16px; max-width: 560px; width: 100%; margin: auto; overflow: hidden; }
+    .modal-header { background: var(--green-dark); color: white; padding: 22px 24px; position: relative; }
+    .modal-header.gold { background: linear-gradient(135deg, #1B4D3E 0%, #4A7C59 60%, #C9A227 100%); }
+    .modal-close { position: absolute; top: 16px; right: 16px; background: rgba(255,255,255,0.15); border: none; color: white; width: 30px; height: 30px; border-radius: 50%; font-size: 1.1rem; cursor: pointer; display: flex; align-items: center; justify-content: center; }
+    .modal-badge-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; opacity: 0.75; margin-bottom: 6px; }
+    .modal-header h2 { font-size: 1.4rem; font-weight: 800; line-height: 1.2; }
+    .modal-scripture { font-style: italic; font-size: 0.82rem; opacity: 0.85; margin-top: 8px; line-height: 1.4; }
+
+    .modal-body { padding: 22px 24px 0; }
+    .meta-row { display: flex; gap: 16px; flex-wrap: wrap; padding: 12px; background: var(--bg); border-radius: 8px; margin-bottom: 16px; }
+    .meta-item strong { display: block; font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.07em; color: var(--text-muted); margin-bottom: 2px; }
+    .meta-item span { font-size: 0.84rem; color: var(--text); font-weight: 600; }
+
+    .modal-desc { font-size: 0.92rem; color: var(--text); line-height: 1.6; margin-bottom: 18px; }
+    .modal-section { margin-bottom: 16px; }
+    .modal-section h4 { font-size: 0.7rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--text-muted); margin-bottom: 8px; }
+    .modal-section ul { list-style: none; }
+    .modal-section ul li { font-size: 0.86rem; color: var(--text); padding: 3px 0 3px 18px; position: relative; line-height: 1.4; }
+    .modal-section ul li::before { content: '✓'; position: absolute; left: 0; color: var(--green-mid); font-weight: 700; }
+    .modal-section ul li.not-item::before { content: '—'; color: var(--text-muted); }
+
+    .modal-footer { padding: 16px 24px 24px; }
+
+    /* BUTTONS */
+    .btn-primary { width: 100%; background: var(--green-dark); color: white; border: none; padding: 15px; border-radius: 10px; font-size: 1rem; font-weight: 700; cursor: pointer; transition: background 0.2s; }
+    .btn-primary:hover { background: var(--green-mid); }
+    .btn-primary.gold-btn { background: var(--gold); color: #1A1A1A; }
+    .btn-primary.gold-btn:hover { background: var(--gold-border); }
+    .btn-primary:disabled { opacity: 0.45; cursor: not-allowed; }
+
+    /* FORM */
+    .step { display: none; }
+    .step.active { display: block; }
+
+    .form-group { margin-bottom: 14px; }
+    .form-group label { display: block; font-size: 0.8rem; font-weight: 600; color: var(--text); margin-bottom: 5px; }
+    .form-group input { width: 100%; padding: 11px 13px; border: 2px solid var(--card-border); border-radius: 8px; font-size: 0.94rem; transition: border-color 0.2s; }
+    .form-group input:focus { outline: none; border-color: var(--green-dark); }
+
+    .commitment-box { background: #F0FDF4; border: 1px solid #BBF7D0; border-radius: 10px; padding: 15px; margin-bottom: 14px; }
+    .commitment-box.gold { background: var(--filled-gold-bg); border-color: #FDE68A; }
+    .commit-label { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; color: var(--green-mid); margin-bottom: 7px; }
+    .commit-label.gold { color: #92400E; }
+    .commitment-box p { font-size: 0.86rem; line-height: 1.55; color: var(--text); }
+    .commitment-box .role-name { font-weight: 700; color: var(--green-dark); }
+
+    .check-row { display: flex; align-items: flex-start; gap: 10px; margin-bottom: 14px; }
+    .check-row input[type="checkbox"] { width: 17px; height: 17px; margin-top: 2px; accent-color: var(--green-dark); flex-shrink: 0; }
+    .check-row label { font-size: 0.86rem; color: var(--text); line-height: 1.4; }
+
+    /* SUCCESS */
+    .success-view { text-align: center; padding: 24px 0 8px; }
+    .success-icon { font-size: 2.8rem; margin-bottom: 10px; }
+    .success-view h3 { font-size: 1.15rem; font-weight: 800; color: var(--green-dark); margin-bottom: 6px; }
+    .success-view p { font-size: 0.86rem; color: var(--text-muted); line-height: 1.5; }
+
+    .pulse { animation: pulse 0.7s ease-in-out; }
+    @keyframes pulse { 0%,100% { transform: scale(1); } 50% { transform: scale(1.03); } }
+
+    /* QR BANNER */
+    .qr-banner { display: flex; align-items: center; justify-content: center; gap: 32px; background: var(--green-dark); padding: 24px 20px; }
+    .qr-side { text-align: center; }
+    .qr-label { color: white; font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.09em; margin-bottom: 10px; }
+    .qr-sub { color: rgba(255,255,255,0.65); font-size: 0.72rem; margin-top: 8px; }
+    .qr-divider { width: 1px; height: 120px; background: rgba(255,255,255,0.2); }
+    .qr-banner canvas { border-radius: 8px; border: 3px solid white; display: block; margin: 0 auto; }
+    .qr-banner img { display: none !important; }
+
+    /* SECTION LABELS */
+    .section-label { text-align: center; padding: 22px 20px 4px; font-size: 0.7rem; font-weight: 800; text-transform: uppercase; letter-spacing: 0.12em; color: var(--text-muted); }
+
+    /* PREFILLED (Troopmaster) */
+    .card.prefilled { background: var(--filled-gold-bg); border-color: var(--gold-border); cursor: default; }
+    .card.prefilled:hover { transform: none; box-shadow: none; }
+
+    /* FOOTER */
+    .page-footer { text-align: center; padding: 20px; font-size: 0.75rem; color: var(--text-muted); }
+
+    @media (max-width: 500px) {
+      .grid { grid-template-columns: 1fr; padding: 12px; }
+      .header h1 { font-size: 1.25rem; }
+      .modal { border-radius: 12px; }
+      .modal-header { padding: 18px 18px; }
+      .modal-body { padding: 18px 18px 0; }
+      .modal-footer { padding: 14px 18px 20px; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="header">
+  <div class="troop">Trail Life USA</div>
+  <h1>Troop MN-9871 Leadership</h1>
+  <p>Adult Volunteer Roles &mdash; August 2026 to May 2027</p>
+</div>
+
+<div class="page-nav" id="page-nav">
+  <span class="page-nav-label">Also signing up?</span>
+  <a class="page-nav-btn" id="youth-link" href="#">&#8594; Youth Leadership Roles</a>
+</div>
+
+<div class="progress-bar">
+  <div class="progress-count"><span id="filled-count">0</span> of <span id="total-count">20</span> roles filled</div>
+  <div class="bar-track"><div class="bar-fill" id="bar-fill"></div></div>
+  <div class="live-indicator"><span class="live-dot"></span> Live &mdash; updates every 5 seconds</div>
+</div>
+
+<div class="section-label">Committee Level Positions</div>
+<div class="grid" id="role-grid-committee"></div>
+
+<div class="section-label">Program Leaders</div>
+<div class="grid" id="role-grid-program-leaders"></div>
+
+<div class="section-label">Trail Guides</div>
+<div class="grid" id="role-grid-trail-guides"></div>
+
+<div class="section-label">Support Roles</div>
+<div class="grid" id="role-grid-support"></div>
+
+<!-- MODAL OVERLAY -->
+<div class="overlay" id="overlay">
+  <div class="modal" id="modal">
+    <div class="modal-header" id="modal-header">
+      <button class="modal-close" onclick="closeModal()">&#x2715;</button>
+      <div class="modal-badge-label" id="modal-badge-label"></div>
+      <h2 id="modal-title"></h2>
+      <div class="modal-scripture" id="modal-scripture"></div>
+    </div>
+    <div class="modal-body">
+      <div class="meta-row">
+        <div class="meta-item"><strong>Time Commitment</strong><span id="modal-time"></span></div>
+        <div class="meta-item"><strong>Reports To</strong><span id="modal-reports"></span></div>
+      </div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="modal-section">
+        <h4>What Success Looks Like</h4>
+        <ul id="modal-success"></ul>
+      </div>
+      <div class="modal-section">
+        <h4>What This Role Is Not</h4>
+        <ul id="modal-not"></ul>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <!-- Step 1: CTA -->
+      <div class="step active" id="step-cta">
+        <button class="btn-primary" id="btn-cta" onclick="showForm()">Sign Me Up</button>
+      </div>
+      <!-- Step 2: Form -->
+      <div class="step" id="step-form">
+        <div class="form-group">
+          <label>Full Name *</label>
+          <input type="text" id="input-name" placeholder="Your name" oninput="validateForm()">
+        </div>
+        <div class="form-group">
+          <label>Email *</label>
+          <input type="email" id="input-email" placeholder="your@email.com" oninput="validateForm()">
+        </div>
+        <div class="form-group">
+          <label>Cell Phone</label>
+          <input type="tel" id="input-phone" placeholder="(612) 555-0100">
+        </div>
+        <div class="commitment-box" id="commit-box">
+          <div class="commit-label" id="commit-label">My Commitment</div>
+          <p>I commit to serve as <span class="role-name" id="commit-role-name"></span> for Troop MN-9871 during the <strong>August 2026 &ndash; May 2027 Trail Life season</strong>. I will fulfill this role faithfully, to the best of my ability, for the glory of God and the good of the boys in our troop.</p>
+        </div>
+        <div class="check-row">
+          <input type="checkbox" id="agree-check" onchange="validateForm()">
+          <label for="agree-check">I agree to serve in this role and understand my responsibilities for the 2026&ndash;2027 season.</label>
+        </div>
+        <button class="btn-primary" id="btn-submit" onclick="submitSignup()" disabled>I'm In for 2026&ndash;2027!</button>
+      </div>
+      <!-- Step 3: Success -->
+      <div class="step" id="step-success">
+        <div class="success-view">
+          <div class="success-icon">&#127881;</div>
+          <h3>You're in!</h3>
+          <p>Thank you for stepping into your son's story.<br>This is the work that matters. See you in August.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div class="qr-banner" id="qr-banner">
+  <div class="qr-side">
+    <div class="qr-label">This Page — Adult Roles</div>
+    <div id="qr-self"></div>
+    <div class="qr-sub">Dads scan here</div>
+  </div>
+  <div class="qr-divider"></div>
+  <div class="qr-side">
+    <div class="qr-label">Youth Leadership Roles</div>
+    <div id="qr-youth"></div>
+    <div class="qr-sub">Boys scan here</div>
+  </div>
+</div>
+<div class="page-footer">Trail Life USA &bull; Troop MN-9871 &bull; Hosted at The North Church</div>
+
+<script>
+// ============================================================
+// CONFIGURATION
+// Paste your Apps Script deployment URL below after setup.
+// ============================================================
+const SCRIPT_URL = 'YOUR_APPS_SCRIPT_URL_HERE';
+
+// ============================================================
+// ROLE DATA — pulled from Troop MN-9871 Job Descriptions doc
+// ============================================================
+// Section membership — used by renderGrid to split into grids
+const COMMITTEE_IDS = ['troopmaster','asst-troopmaster','committee-chair','chaplain','chaplain-asst-woodlands','chaplain-asst-navads','treasurer','assistant-treasurer'];
+const PROGRAM_LEADER_IDS = ['woodlands-ranger','asst-woodlands-ranger','navigator-trail-master','asst-navigator-trail-master','adventurer-advisor','asst-adventurer-advisor'];
+const TRAIL_GUIDE_IDS = ['trail-guide-fox','trail-guide-hawk','trail-guide-mountain-lion','trail-guide-navigator','trail-guide-adventurer'];
+
+const ROLES = [
+  // ── COMMITTEE ──────────────────────────────────────────────
+  {
+    id: 'troopmaster',
+    name: 'Troopmaster',
+    leadership: true,
+    prefilled: 'Nick Stromwall',
+    subtitle: 'Senior leader of Troop MN-9871. Filled by Nick Stromwall.',
+    time: 'Full season commitment',
+    reportsTo: 'Troop Committee Chair',
+    scripture: '1 Peter 5:2 — Shepherd the flock of God that is among you.',
+    desc: 'The Troopmaster holds final responsibility for the troop program, culture, and mission. He casts vision, develops leaders, resolves conflict, and ensures the troop is faithfully pursuing its mission to raise Christ-centered young men.',
+    success: ['Troop program runs with clarity and purpose all year', 'Leaders are developed and empowered to serve', 'Boys are known, challenged, and growing in faith', 'The troop is healthy and expanding'],
+    notThis: ['Not doing everything himself — he leads leaders', 'Not above accountability — serves under the Committee Chair']
+  },
+  {
+    id: 'asst-troopmaster',
+    name: 'Assistant Troopmaster',
+    leadership: true,
+    spots: 3,
+    subtitle: 'Training to lead. Three men stepping into Troopmaster capacity.',
+    time: '6–10 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: '2 Timothy 2:2 — Entrust to faithful men who will teach others also.',
+    desc: 'The Assistant Troopmaster role exists to build leadership depth. Three men are being invited into this role to train alongside Nick and develop the judgment, relationships, and operational knowledge to lead the troop. This is a succession and development role — high trust, high investment.',
+    success: ['Deeply familiar with every aspect of troop operations by December', 'Building genuine relationships with leaders, boys, and families', 'Ready to step into full Troopmaster responsibilities when called upon', 'Growing in confidence and competence as a troop leader'],
+    notThis: ['Not a ceremonial title — this is active mentoring and learning', 'Not expected to have all the answers yet — that is what the training is for']
+  },
+  {
+    id: 'committee-chair',
+    name: 'Committee Chair',
+    leadership: true,
+    subtitle: 'Leads the troop committee and governs with wisdom and accountability.',
+    time: '3–5 hours per month',
+    reportsTo: 'Church Ministry Leadership',
+    scripture: 'Proverbs 11:14 — In an abundance of counselors there is safety.',
+    desc: 'The Committee Chair leads the troop\'s core committee — the governing body that provides oversight, accountability, and strategic direction for Troop MN-9871. He runs monthly committee meetings, holds the Troopmaster accountable, manages conflict resolution, and ensures the troop is aligned with its covenant mission and church partnership.',
+    success: ['Core committee meets monthly with clear agenda and follow-through', 'Troopmaster has a trusted partner for governance decisions', 'Financial and operational accountability maintained throughout the year', 'Troop leadership culture reflects biblical servant leadership'],
+    notThis: ['Not the day-to-day program leader — that is the Troopmaster', 'Not above the Troopmaster relationally — a peer who provides accountability']
+  },
+  {
+    id: 'chaplain',
+    name: 'Chaplain',
+    leadership: true,
+    subtitle: 'Spiritual shepherd for leaders, boys, and families.',
+    time: '3–5 hours per month',
+    reportsTo: 'Troopmaster / Committee Chair',
+    scripture: 'Colossians 3:16 — Let the word of Christ dwell in you richly.',
+    desc: 'The Chaplain provides spiritual oversight for Troop MN-9871 — praying for leaders and families, leading devotionals at committee meetings, and ensuring the troop\'s spiritual health is tended to with intentionality. He is also the primary point of care when a leader or family is going through a difficult season.',
+    success: ['Leaders and families feel spiritually supported throughout the year', 'Committee meetings open with meaningful prayer and Scripture', 'Troop culture is visibly Christ-centered, not just programmatically', 'Boys are pointed toward Christ through the chaplain\'s presence'],
+    notThis: ['Not responsible for all spiritual content in meetings — that is shared across leadership', 'Not a pastor to the whole church — shepherds within the troop context']
+  },
+  {
+    id: 'chaplain-asst-woodlands',
+    name: 'Asst. Chaplain — Woodlands',
+    leadership: false,
+    subtitle: 'Spiritual care and devotional support for K–5th grade boys.',
+    time: '2–3 hours per month',
+    reportsTo: 'Chaplain',
+    scripture: 'Mark 10:14 — Let the children come to me; do not hinder them.',
+    desc: 'The Assistant Chaplain for Woodlands assists the Chaplain in providing spiritual oversight for the K through 5th grade program. This includes leading or supporting devotional moments at Woodlands meetings, praying for families, and helping Trail Guides integrate faith meaningfully into badge work and patrol culture.',
+    success: ['Woodlands boys encounter Scripture and prayer regularly at Thursday meetings', 'Trail Guides feel supported in their spiritual leadership of boys', 'Families of Woodlands boys feel the troop is genuinely faith-centered', 'Devotional content is age-appropriate and engaging for younger boys'],
+    notThis: ['Not teaching full lessons — that is the Trail Guide\'s role', 'Not responsible for discipling every boy individually — partners with guides']
+  },
+  {
+    id: 'chaplain-asst-navads',
+    name: 'Asst. Chaplain — NAV/ADS',
+    leadership: false,
+    subtitle: 'Spiritual care and discipleship for middle and high school boys.',
+    time: '2–3 hours per month',
+    reportsTo: 'Chaplain',
+    scripture: 'Psalm 119:9 — How can a young man keep his way pure? By guarding it according to your word.',
+    desc: 'The Assistant Chaplain for Navigators and Adventurers assists the Chaplain in serving the spiritual needs of middle and high school boys. This includes supporting devotional moments, walking alongside older boys through faith questions, and helping Trail Guides disciple teenage Trailmen with depth and intentionality.',
+    success: ['NAV/ADS boys encounter real, substantive spiritual content — not just moral advice', 'Older boys feel safe asking hard faith questions with trusted leaders', 'Trail Guides for NAV/ADS have a chaplain partner they can call on', 'Devotional moments are honest, age-appropriate, and rooted in Scripture'],
+    notThis: ['Not expected to have every theological answer — points boys to Scripture and trusted resources', 'Not the sole discipler of every teenage boy in the troop']
+  },
+  {
+    id: 'treasurer',
+    name: 'Treasurer',
+    leadership: true,
+    subtitle: 'Stewards troop finances with integrity, clarity, and care.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Proverbs 27:23 — Know well the condition of your flocks.',
+    desc: 'The Treasurer manages all troop finances: tracks income and expenses, processes Stripe payments, provides monthly financial reports, and maintains accurate records year-round. This is the financial backbone of the troop — every family and every boy benefits from a treasurer who does this well.',
+    success: ['Monthly financial reports delivered to the committee', 'Dues and event payments processed accurately', 'Budget stays healthy across the full year', 'Records are clean and ready for year-end review'],
+    notThis: ['Not making unilateral financial decisions', 'Not responsible for fundraising — that is a separate role']
+  },
+  {
+    id: 'assistant-treasurer',
+    name: 'Assistant Treasurer',
+    leadership: false,
+    subtitle: 'Supports the Treasurer with Stripe payments and recordkeeping.',
+    time: '1–2 hours per month',
+    reportsTo: 'Treasurer',
+    scripture: 'Luke 16:10 — Faithful in little, faithful in much.',
+    desc: 'Assists the Treasurer with day-to-day financial tasks, especially Stripe payment processing, dues tracking, and monthly reconciliation. A great way to learn troop operations and provide reliable backup to the Treasurer.',
+    success: ['Stripe payments processed accurately and on time', 'Financial records supported and backed up', 'Treasurer has a reliable partner throughout the year'],
+    notThis: ['Not making financial decisions independently', 'Not solely responsible for the full budget']
+  },
+  // ── PROGRAM LEADERS ────────────────────────────────────────
+  {
+    id: 'woodlands-ranger',
+    name: 'Woodlands Ranger',
+    leadership: true,
+    subtitle: 'Senior program leader for Kindergarten through 5th grade.',
+    time: '3–5 hrs/week',
+    reportsTo: 'Troopmaster',
+    scripture: 'Deuteronomy 6:7 — You shall teach them diligently to your children.',
+    desc: 'The Woodlands Ranger owns the K–5 program. He coordinates curriculum across the Fox, Hawk, and Mountain Lion patrols, mentors Trail Guides, ensures badge work is on track, and brings energy and vision to the youngest Trailmen in the troop. He is the primary adult voice over the Woodlands branch.',
+    success: ['Woodlands Trail Guides are supported, equipped, and not going it alone', 'Curriculum is sequenced across the year — no random Thursday nights', 'Boys are advancing and being challenged appropriately for their age', 'Parents of Woodlands boys feel the troop is organized and intentional'],
+    notThis: ['Not running every patrol himself — he leads and equips Trail Guides', 'Not responsible for the full troop program (that is the Troopmaster)']
+  },
+  {
+    id: 'asst-woodlands-ranger',
+    name: 'Assistant Woodlands Ranger',
+    leadership: true,
+    subtitle: 'Right-hand support for the Woodlands branch.',
+    time: '2–4 hrs/week',
+    reportsTo: 'Woodlands Ranger',
+    scripture: 'Proverbs 27:17 — As iron sharpens iron, so one man sharpens another.',
+    desc: 'Supports the Woodlands Ranger in coordinating the K–5 program. Covers when the Ranger is absent, assists with Trail Guide mentoring, and takes ownership of specific curriculum or event logistics as assigned. A great role for a dad who wants to grow toward senior leadership.',
+    success: ['Woodlands runs smoothly when the Ranger is out', 'Trail Guides have two experienced adults to go to with questions', 'He is actively learning the Ranger role with eyes on succession'],
+    notThis: ['A backup who only shows up when asked', 'Someone waiting for the Ranger to assign tasks every week']
+  },
+  {
+    id: 'navigator-trail-master',
+    name: 'Navigator Trail Master',
+    leadership: true,
+    subtitle: 'Senior program leader for middle school Navigators.',
+    time: '3–5 hrs/week',
+    reportsTo: 'Troopmaster',
+    scripture: 'Proverbs 13:20 — Walk with the wise and become wise.',
+    desc: 'The Navigator Trail Master leads the middle school branch. He oversees weekly programming for Navigator-aged boys, mentors youth patrol leaders, drives advancement, and creates the kind of environment where teenage boys want to show up on Thursday nights. This is a high-relational, high-impact role.',
+    success: ['NAV boys are engaged, advancing, and growing in faith and character', 'Youth Patrol Leaders are being mentored and stretched', 'Thursday nights feel purposeful — not just another meeting', 'Guys in middle school are actually excited to be there'],
+    notThis: ['Not doing every lesson himself — he deploys and coaches Trail Guides', 'Not just the most experienced guy in the room — he is actively developing the next layer of leaders']
+  },
+  {
+    id: 'asst-navigator-trail-master',
+    name: 'Asst. Navigator Trail Master',
+    leadership: true,
+    subtitle: 'Partners with the Trail Master to lead Navigator programming.',
+    time: '2–4 hrs/week',
+    reportsTo: 'Navigator Trail Master',
+    scripture: 'Ecclesiastes 4:9 — Two are better than one, because they have a good reward for their toil.',
+    desc: 'Supports the Navigator Trail Master in all aspects of middle school programming. Covers meetings when the Trail Master is absent, builds relationships with individual boys, and owns specific programming or logistics as delegated. Ideal for a dad who loves middle school guys and wants to grow in leadership.',
+    success: ['NAV programming continues without disruption when the Trail Master is out', 'Boys in the NAV branch know and trust him — he is a real presence, not a backup', 'He is clearly growing into the Trail Master role'],
+    notThis: ['A placeholder — he is in the room, in the relationships, and in the program every week']
+  },
+  {
+    id: 'adventurer-advisor',
+    name: 'Adventurer Advisor',
+    leadership: true,
+    subtitle: 'Senior program leader for high school Adventurers.',
+    time: '3–5 hrs/week',
+    reportsTo: 'Troopmaster',
+    scripture: '1 Timothy 4:12 — Set the believers an example in speech, in conduct, in love, in faith, in purity.',
+    desc: 'The Adventurer Advisor leads the high school branch. He works with older teenage boys who are close to launching into manhood — his job is to make that launch count. He oversees programming, mentors youth leaders, drives challenge and discipleship, and creates the capstone experience of a young man\'s Trail Life journey.',
+    success: ['Adventurer boys are being genuinely discipled — not just programmed', 'Older boys are given real responsibility and trusted with it', 'Guys finishing their Trail Life career do so with a clear sense of identity and purpose', 'The NAV/ADS division feels like one unified culture of older men and boys'],
+    notThis: ['Just a program manager — this role is fundamentally relational', 'Doing the work for the boys — he gives them the weight and watches them carry it']
+  },
+  {
+    id: 'asst-adventurer-advisor',
+    name: 'Asst. Adventurer Advisor',
+    leadership: true,
+    subtitle: 'Supports the Advisor and builds deep relationships with high school guys.',
+    time: '2–4 hrs/week',
+    reportsTo: 'Adventurer Advisor',
+    scripture: 'Titus 2:6-7 — Urge the younger men to be self-controlled. Show yourself in all respects to be a model of good works.',
+    desc: 'Partners with the Adventurer Advisor to lead the high school program. Takes ownership of specific relationships, program elements, or campout logistics as assigned. A tremendous opportunity for a man who wants to pour into older teenage boys at a pivotal moment in their lives.',
+    success: ['High school guys know him by name and trust him enough to talk', 'He covers for the Advisor without the program losing momentum', 'He is growing in his ability to disciple older teenage men'],
+    notThis: ['Someone who just shows up — this role demands investment in individual boys']
+  },
+  // ── TRAIL GUIDES ───────────────────────────────────────────
+  {
+    id: 'trail-guide-fox',
+    name: 'Trail Guide — Woodlands Fox',
+    leadership: true,
+    spots: 3,
+    subtitle: 'Frontline mentor for Fox Patrol boys — the role that changes a life.',
+    time: '5–10 hours per month',
+    reportsTo: 'Woodlands Ranger',
+    scripture: 'Proverbs 22:6 — Train up a child in the way he should go.',
+    desc: 'Trail Guides are the frontline mentors for Trailmen. Fox Patrol needs 3 guides — a Primary and two Secondaries — to run weekly badge work, walk boys through advancement, and build the kind of relationships that shape character for a lifetime.',
+    success: ['Boys advance consistently and know someone is in their corner', 'Patrol runs with purpose and brotherhood', 'Deep trust built between guide and each boy', 'Boys grow in faith, outdoor skills, and leadership'],
+    notThis: ['Not doing advancement for the boys — guiding them through it', 'Not running meetings alone — you have a team']
+  },
+  {
+    id: 'trail-guide-hawk',
+    name: 'Trail Guide — Woodlands Hawk',
+    leadership: true,
+    spots: 3,
+    subtitle: 'Frontline mentor for Hawk Patrol boys.',
+    time: '5–10 hours per month',
+    reportsTo: 'Woodlands Ranger',
+    scripture: 'Proverbs 22:6 — Train up a child in the way he should go.',
+    desc: 'Hawk Patrol needs 3 Trail Guides to walk alongside boys week after week. This is the most direct investment you can make — showing up Thursday nights, leading badge work, and building relationships that boys will remember decades from now.',
+    success: ['Hawk boys advance consistently and know their guide by name', 'Weekly badge work is prepared and engaging', 'Boys feel challenged, known, and encouraged', 'Patrol has strong culture and accountability'],
+    notThis: ['Not solely responsible for all badge content — Trail Life provides curriculum', 'Not operating alone — you have co-guides']
+  },
+  {
+    id: 'trail-guide-mountain-lion',
+    name: 'Trail Guide — Woodlands Mountain Lion',
+    leadership: true,
+    spots: 3,
+    subtitle: 'Frontline mentor for Mountain Lion Patrol boys.',
+    time: '5–10 hours per month',
+    reportsTo: 'Woodlands Ranger',
+    scripture: 'Proverbs 22:6 — Train up a child in the way he should go.',
+    desc: 'Mountain Lion Patrol needs 3 guides committed to the weekly work of mentoring boys through badge advancement and character formation. The most impactful role in the troop — right in the room with the boys every Thursday.',
+    success: ['Mountain Lion boys are advancing and engaged', 'Guides know each boy\'s progress and next steps', 'Boys experience real mentorship, not just programming', 'Patrol thrives even when one guide is absent'],
+    notThis: ['Not doing the work for the boys', 'Not expected to be perfect — just present and consistent']
+  },
+  {
+    id: 'trail-guide-navigator',
+    name: 'Trail Guide — Navigators',
+    leadership: true,
+    spots: 3,
+    subtitle: 'Mentor for middle school Navigators — big investment, big return.',
+    time: '5–10 hours per month',
+    reportsTo: 'Navigator Trail Master',
+    scripture: 'Proverbs 27:17 — As iron sharpens iron, so one man sharpens another.',
+    desc: 'Navigator guides walk with middle school boys through a critical window of development. Three guides share the load — leading weekly programming, driving advancement, and building the kind of trust that gives teenage boys a safe place to grow into men.',
+    success: ['Navigator boys are advancing and showing up consistently', 'Guides know their boys\' lives beyond Thursday nights', 'Boys are being equipped for leadership roles', 'Middle school years are marked by meaningful growth'],
+    notThis: ['Not a babysitter or enforcer', 'Not running everything alone — three guides share the work']
+  },
+  {
+    id: 'trail-guide-adventurer',
+    name: 'Trail Guide — Adventurers',
+    leadership: true,
+    spots: 3,
+    subtitle: 'Mentor for high school Adventurers — invest in the next generation of men.',
+    time: '5–10 hours per month',
+    reportsTo: 'Adventurer Advisor',
+    scripture: '1 Timothy 4:12 — Let no one despise you for your youth.',
+    desc: 'Adventurer guides invest in high school boys during the final stretch before adulthood. Three guides work alongside the Adventurer Advisor to run a program that challenges young men, builds real outdoor skills, and points them toward Christ-centered manhood.',
+    success: ['Adventurers are engaged, challenged, and taking ownership', 'Boys move toward Freedom Award and meaningful milestone events', 'Guides have genuine mentoring relationships with their guys', 'High school years are marked by adventure and character formation'],
+    notThis: ['Not a peer — you are a guide and mentor', 'Not expected to have all the answers — just to show up faithfully']
+  },
+  {
+    id: 'outdoor-activities-chair',
+    name: 'Outdoor Activities Chair',
+    leadership: true,
+    subtitle: 'Coordinates campouts, hikes, and all outdoor adventures.',
+    time: '4–6 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: 'Genesis 1:31 — God saw all he had made, and it was very good.',
+    desc: 'The Outdoor Activities Chair ensures troop outdoor events are safe, fun, and aligned with Trail Life values. This role oversees site research, reservations, and the planning process — supervising grub masters and supporting youth leaders so they can focus on the boys.',
+    success: ['Full outdoor calendar planned 4–6 weeks ahead', 'Events well-attended and run smoothly', 'Boys experience challenge, beauty, and brotherhood outdoors'],
+    notThis: ['Not running every event alone', 'Not the outdoor skills instructor — that is the Trail Guide']
+  },
+  {
+    id: 'fundraising-chair',
+    name: 'Fundraising Chair',
+    leadership: true,
+    subtitle: 'Leads troop fundraising so no boy is ever left out.',
+    time: '4–6 hours per month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: '2 Corinthians 9:7 — God loves a cheerful giver.',
+    desc: 'Leads troop fundraising by coordinating campaigns, community partnerships, and family involvement. Works with the Treasurer and Points Manager to ensure resources are available for every boy to participate — regardless of financial situation. Leads a small team including family volunteers.',
+    success: ['Annual fundraising goals met', 'Parents and youth engaged and motivated', 'Scholarship fund supported throughout the year', 'No boy misses out due to cost'],
+    notThis: ['Not funding the troop personally', 'Not operating alone — builds and leads a small team']
+  },
+  {
+    id: 'treasurer',
+    name: 'Treasurer',
+    leadership: true,
+    subtitle: 'Stewards troop finances with integrity, clarity, and care.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Proverbs 27:23 — Know well the condition of your flocks.',
+    desc: 'The Treasurer manages all troop finances: tracks income and expenses, processes Stripe payments, provides monthly financial reports, and maintains accurate records year-round. This is the financial backbone of the troop — every family and every boy benefits from a treasurer who does this well.',
+    success: ['Monthly financial reports delivered to the committee', 'Dues and event payments processed accurately', 'Budget stays healthy across the full year', 'Records are clean and ready for year-end review'],
+    notThis: ['Not making unilateral financial decisions', 'Not responsible for fundraising — that is a separate role']
+  },
+  {
+    id: 'communications-manager',
+    name: 'Communications Manager',
+    leadership: false,
+    subtitle: 'Keeps families informed through clear, consistent updates.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troop Committee Chair or Troopmaster',
+    scripture: 'Colossians 4:6 — Let your speech always be gracious.',
+    desc: 'The Communications Manager keeps parents, youth, and leaders consistently informed about troop activities and vision. This person is the information hub — ensuring announcements, schedules, and updates reach families clearly across email, Slack, and group text.',
+    success: ['Weekly or bi-weekly updates go out on time', 'Parents know where to find troop information', 'Major events communicated at least 2 weeks in advance', 'Families feel connected and in the loop'],
+    notThis: ['Not responsible for creating all event content', 'Not expected to answer every question instantly', 'Not in charge of setting the troop calendar']
+  },
+  {
+    id: 'calendar-manager',
+    name: 'Calendar Manager',
+    leadership: false,
+    subtitle: 'Maintains the master troop calendar so families can plan ahead.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: '1 Corinthians 14:40 — All things done decently and in order.',
+    desc: 'The Calendar Manager maintains the master troop calendar, ensuring all events are scheduled, communicated, and conflict-free well in advance. Works closely with the Communications Manager and Program Leaders to help every family stay ahead of the schedule.',
+    success: ['All events entered promptly and accurately', 'No scheduling conflicts across the year', 'Parents and youth rely on the calendar with confidence'],
+    notThis: ['Not responsible for planning every event', 'Not responsible for last-minute reminders']
+  },
+  {
+    id: 'onboarding-coordinator',
+    name: 'Onboarding Coordinator',
+    leadership: false,
+    subtitle: 'Welcomes new families into troop life with warmth and clarity.',
+    time: '2–4 hours per month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Romans 15:7 — Welcome one another as Christ welcomed you.',
+    desc: 'The Onboarding Coordinator ensures every new family feels valued and quickly connected. They explain troop structure, help parents find where to serve, answer key questions, and ensure the first few weeks for a new family are smooth and encouraging.',
+    success: ['New families welcomed within their first week', 'Parents oriented to troop structure and Slack', 'Youth matched with patrols smoothly', 'New families feel they belong here'],
+    notThis: ['Not responsible for all paperwork', 'Not the sole point of contact for every question']
+  },
+  {
+    id: 'snack-coordinator',
+    name: 'Snack Coordinator',
+    leadership: false,
+    subtitle: 'Organizes the weekly snack rotation to support fellowship.',
+    time: '1 hour per month',
+    reportsTo: 'Troopmaster or Committee Chair',
+    scripture: 'Hebrews 13:2 — Do not neglect to show hospitality.',
+    desc: 'Ensures every troop meeting has snacks coordinated fairly among families by maintaining a simple rotation schedule and sending friendly reminders. Small role, real impact on the warmth of Thursday nights.',
+    success: ['Snack schedule shared at the start of each semester', 'Families reminded a week in advance', 'Snacks provided consistently at every meeting'],
+    notThis: ['Not expected to provide all snacks personally', 'Not responsible for cleanup']
+  },
+  {
+    id: 'worship-leader',
+    name: 'Worship Leader',
+    leadership: false,
+    subtitle: 'Leads the troop in worship to keep Christ central.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troopmaster or Chaplain',
+    scripture: 'Psalm 100:2 — Serve the Lord with gladness!',
+    desc: 'Ensures spiritual focus in troop meetings through songs, devotions, and Scripture. Coordinates youth participation where possible and partners with the Navigator Chaplain\'s Aide. Keeps Christ at the center of every Thursday night.',
+    success: ['Regular spiritual content woven into meetings', 'Youth engaged and participating in worship', 'Families encouraged in their faith week to week'],
+    notThis: ['Not expected to preach full sermons', 'Not solely responsible for the troop\'s spiritual depth']
+  },
+  {
+    id: 'community-service-chair',
+    name: 'Community Service Chair',
+    leadership: false,
+    subtitle: 'Coordinates service projects that let boys put faith into action.',
+    time: '3–5 hours per project',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Matthew 5:16 — Let your light shine before others.',
+    desc: 'Identifies, organizes, and oversees troop service projects in partnership with local organizations. Ensures that Trailmen are actively serving in the community throughout the year — not just camping and adventuring, but giving back.',
+    success: ['Troop completes multiple meaningful service projects per year', 'Youth actively engaged in planning and serving', 'Community impact is visible and the troop is known for it'],
+    notThis: ['Not personally responsible for all volunteer hours', 'Not operating alone — recruits family help for each project']
+  },
+  {
+    id: 'equipment-coordinator',
+    name: 'Equipment Coordinator',
+    leadership: false,
+    subtitle: 'Manages troop gear so every adventure is ready to go.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: 'Ecclesiastes 10:10 — Skill and preparation bring success.',
+    desc: 'Responsible for all troop equipment — organizing, maintaining, and tracking gear for safe use at campouts and meetings. Partners with the Navigator Quartermaster to keep inventory current and damaged gear replaced promptly.',
+    success: ['All equipment available and in working order for every event', 'Inventory tracked and current', 'Damaged or missing gear flagged and replaced quickly'],
+    notThis: ['Not storing all gear at home alone', 'Not funding equipment purchases personally']
+  },
+  {
+    id: 'health-safety-chair',
+    name: 'Health & Safety Chair',
+    leadership: false,
+    subtitle: 'Ensures the troop has solid safety protocols at every event.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: 'Psalm 121:7 — The Lord will keep you from all harm.',
+    desc: 'Develops troop safety procedures, ensures first aid kits are stocked and present at every event, and coordinates the Medical Safety Officer role for campouts. Partners with the Medical Forms Coordinator to ensure no boy attends an event without current forms on file.',
+    success: ['Safety kits stocked and present at every event', 'Safety protocols known and followed by all leaders', 'Medical needs documented and accessible in the field'],
+    notThis: ['Not solely responsible for all emergency response', 'Not a replacement for professional medical personnel']
+  },
+  {
+    id: 'historian',
+    name: 'Historian',
+    leadership: false,
+    subtitle: 'Captures the troop\'s story through photos, video, and memories.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: 'Psalm 77:11 — I will remember the deeds of the Lord.',
+    desc: 'Keeps record of troop events through photos, videos, and written accounts. Builds a growing archive of the troop\'s journey that families and boys will look back on for years. Partners with the PR & Social Media Chair for content.',
+    success: ['Events documented consistently throughout the year', 'Photo archive organized and accessible to families', 'Year-end memories captured and celebrated'],
+    notThis: ['Not responsible for publicity alone', 'Not required to be at every single event']
+  },
+  {
+    id: 'medical-forms-coordinator',
+    name: 'Medical Forms Coordinator',
+    leadership: false,
+    subtitle: 'Manages medical and consent forms for every boy at every event.',
+    time: '2–3 hours per quarter',
+    reportsTo: 'Health & Safety Chair',
+    scripture: 'Philippians 2:4 — Look not only to your own interests, but to the interests of others.',
+    desc: 'Collects and organizes medical forms for each Trailman to ensure the troop is ready for any situation at every event. Keeps records current, notifies families of missing forms, and ensures leaders have access in the field.',
+    success: ['All medical forms collected before each campout', 'Forms organized and accessible to event leaders', 'Families notified promptly of expired or missing forms'],
+    notThis: ['Not giving medical treatment', 'Not solely responsible for emergency response']
+  },
+  {
+    id: 'parent-advancement-coordinator',
+    name: 'Parent Advancement Coordinator',
+    leadership: false,
+    subtitle: 'Supports the advancement journey alongside Trail Guides.',
+    time: '2–3 hours per month',
+    reportsTo: 'Troopmaster',
+    scripture: '2 Timothy 2:2 — Entrust to faithful men who will teach others also.',
+    desc: 'Helps track, encourage, and support Trailmen in their advancement work. Partners with Trail Guides to ensure no boy falls behind, and prepares recognition for Courts of Honor. A great role for a parent who wants to be involved in the boys\' progress.',
+    success: ['Youth stay on track with advancement goals', 'Courts of Honor are well-prepared and meaningful', 'Parents are informed of their son\'s progress'],
+    notThis: ['Not doing advancement work for the youth', 'Not making unilateral advancement decisions']
+  },
+  {
+    id: 'pr-social-media-chair',
+    name: 'PR & Social Media Chair',
+    leadership: false,
+    subtitle: 'Builds the troop\'s public presence and tells our story well.',
+    time: '2–4 hours per month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Matthew 5:14 — A city on a hill cannot be hidden.',
+    desc: 'Manages troop social media, posts updates, and promotes events in the community. Helps recruit new families by telling the troop\'s story compellingly. Partners with the Historian for photos and content to post.',
+    success: ['Regular posts celebrating troop life and adventure', 'Positive troop reputation built in the broader community', 'New families discover the troop through social channels'],
+    notThis: ['Not responsible for all photos or content', 'Not the sole spokesperson for the troop']
+  },
+  {
+    id: 'book-manager',
+    name: 'Book Manager',
+    leadership: false,
+    subtitle: 'Keeps handbooks, curricula, and advancement materials stocked.',
+    time: '1–2 hours per month',
+    reportsTo: 'Parent Advancement Coordinator',
+    scripture: 'Proverbs 3:3 — Write them on the tablet of your heart.',
+    desc: 'Responsible for tracking handbooks, guides, and troop-related resources. Ensures new families can quickly access materials and advancement resources are always stocked. Works closely with the Onboarding and Advancement teams.',
+    success: ['Troop handbooks current and available for every boy', 'Families have the correct advancement resources', 'Inventory tracked and updated regularly'],
+    notThis: ['Not teaching or running advancement directly', 'Not deciding curriculum without troop leadership input']
+  },
+  {
+    id: 'tshirt-manager',
+    name: 'T-Shirt Manager',
+    leadership: false,
+    subtitle: 'Handles troop apparel orders for unity and identity.',
+    time: '2–3 hours per order cycle',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Colossians 3:17 — Do everything in the name of the Lord Jesus.',
+    desc: 'Organizes the ordering and distribution of troop t-shirts and other apparel. Ensures shirts are available for new families and that special runs are done for campouts. Coordinates with the Treasurer on payments and the PR Chair for branding consistency.',
+    success: ['T-shirt orders available twice per year or as needed', 'Families receive shirts promptly after ordering', 'Apparel reflects troop unity and identity clearly'],
+    notThis: ['Not designing shirts independently without leader input', 'Not financially responsible for orders']
+  },
+  {
+    id: 'camping-coordinator',
+    name: 'Camping Coordinator',
+    leadership: false,
+    subtitle: 'Organizes campout logistics so leaders can focus on the boys.',
+    time: '4–6 hours per campout',
+    reportsTo: 'Outdoor Activities Chair',
+    scripture: 'Proverbs 16:3 — Commit your work to the Lord, and your plans will be established.',
+    desc: 'Oversees planning and logistics for troop campouts — site reservations, registration deadlines, equipment coordination, and food planning. Ensures youth leaders and Trail Guides have everything they need to focus on discipling boys rather than managing logistics.',
+    success: ['Campouts planned and communicated 4–6 weeks in advance', 'Logistics run smoothly from arrival to departure', 'Families know exactly what to bring and what to expect'],
+    notThis: ['Not leading campout activities — that is the Trail Guides\' role', 'Not personally responsible for providing gear or food']
+  },
+  {
+    id: 'fitness-challenge-coordinator',
+    name: 'Fitness Challenge Coordinator',
+    leadership: false,
+    subtitle: 'Builds a culture of physical readiness and healthy competition.',
+    time: '2–4 hours/month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: '1 Corinthians 9:27 — I discipline my body and keep it under control.',
+    desc: 'Designs and runs periodic fitness challenges for Trailmen across all branches — Woodlands through Adventurers. Tracks scores, celebrates progress, and connects physical discipline to the biblical principle of stewarding the bodies God gave us. Coordinates with Trail Guides to integrate challenges into Thursday nights and campout programming.',
+    success: ['At least one troop-wide fitness challenge per semester', 'All branches engaged with age-appropriate physical goals', 'Boys and leaders see connection between physical discipline and godly character', 'Results tracked and celebrated at Courts of Honor'],
+    notThis: ['Not running physical education classes or acting as a personal trainer', 'Not responsible for medical screening — defers to Safety Officer and parent judgment']
+  },
+  {
+    id: 'scripture-memory-coordinator',
+    name: 'Scripture Memory Coordinator',
+    leadership: false,
+    subtitle: 'Keeps God\'s Word in the hearts of Trailmen all year long.',
+    time: '1–2 hours/month',
+    reportsTo: 'Chaplain',
+    scripture: 'Psalm 119:11 — I have stored up your word in my heart, that I might not sin against you.',
+    desc: 'Selects, introduces, and tracks a troop-wide Scripture memory plan across the 2026-2027 season. Coordinates recitation moments at Thursday meetings, Courts of Honor, and campouts. Works with the Chaplain and Trail Guides to reinforce verses in patrol settings. Goal: every Trailman leaves the year with God\'s Word written on his heart.',
+    success: ['A fresh memory verse introduced each month or theme unit', 'Boys can recite key verses at Courts of Honor', 'Recitation integrated naturally into meetings — not as a drill, but as worship', 'Patrol leaders empowered to carry the verse in their patrol'],
+    notThis: ['Not policing or grading memory — encouraging and celebrating progress', 'Not creating a second curriculum — works within the existing program rhythm']
+  },
+  {
+    id: 'technology-chair',
+    name: 'Technology Chair / Webmaster',
+    leadership: false,
+    subtitle: 'Keeps the troop\'s digital presence working and accessible.',
+    time: '2–4 hrs/month',
+    reportsTo: 'Troop Committee Chair',
+    scripture: 'Colossians 3:23 — Whatever you do, work heartily, as for the Lord.',
+    desc: 'Manages the troop website (troop9871.org), handles tech setup for meetings and events (slides, display screens, audio), maintains the troop email platform, and serves as the go-to resource when technology isn\'t working. Works closely with the Communications Chair on digital distribution.',
+    success: ['Troop website is current, accurate, and easy for families to navigate', 'Meeting AV and display needs are set up and working before the first Trailman arrives', 'Troop email platform is configured and running reliably', 'Tech problems get solved quickly without derailing leadership bandwidth'],
+    notThis: ['Not a full IT department — focuses on the troop\'s specific tools and platforms', 'Not responsible for families\' personal devices or home internet issues']
+  },
+  {
+    id: 'registration-desk-lead',
+    name: 'Registration Desk Lead',
+    leadership: false,
+    subtitle: 'First face families see. Sets the tone every Thursday.',
+    time: '1–2 hrs/week (Thursday evenings)',
+    reportsTo: 'Registrar / Committee Chair',
+    scripture: 'Romans 15:7 — Welcome one another as Christ has welcomed you.',
+    desc: 'Runs the check-in table at Thursday meetings — greeting families, recording attendance, handling sign-up sheets, collecting forms, and directing new families to the right place. Partners with the Registrar to ensure attendance records are accurate and that no family slips through the cracks on their first night.',
+    success: ['Every boy is checked in and attendance logged by 6:45 PM', 'New families are warmly welcomed and pointed to the right patrol within minutes of arrival', 'Sign-in process is smooth — no line, no confusion', 'He knows the regulars by name and notices when someone is missing'],
+    notThis: ['A passive sign-in station — this role is relational, not just administrative', 'Responsible for Registrar-level data management (he hands off records, he does not own the system)']
+  }
+];
+
+// ============================================================
+// STATE + LOCAL PERSISTENCE
+// ============================================================
+const LOCAL_KEY = 'tl9871-adult-states-v1';
+
+function saveToLocal() {
+  try { localStorage.setItem(LOCAL_KEY, JSON.stringify(roleStates)); } catch(e) {}
+}
+
+function loadFromLocal() {
+  try {
+    const raw = localStorage.getItem(LOCAL_KEY);
+    if (!raw) return;
+    const saved = JSON.parse(raw);
+    Object.keys(saved).forEach(id => {
+      if (roleStates[id] !== undefined) roleStates[id] = saved[id];
+    });
+  } catch(e) {}
+}
+
+let roleStates = {};
+ROLES.forEach(r => { roleStates[r.id] = { status: 'open', filled: 0, names: [] }; });
+// Pre-fill Troopmaster — Nick Stromwall
+roleStates['troopmaster'] = { status: 'filled', filled: 1, names: ['Nick Stromwall'] };
+// Load any signups from previous session
+loadFromLocal();
+let currentRoleId = null;
+
+function totalSpots() { return ROLES.filter(r => !r.prefilled).reduce((s, r) => s + (r.spots || 1), 0); }
+function filledSpots() { return ROLES.filter(r => !r.prefilled).reduce((s, r) => s + (roleStates[r.id]?.filled || 0), 0); }
+function isFull(role) { const st = roleStates[role.id]; return st && st.filled >= (role.spots || 1); }
+
+// ============================================================
+// BUILD CARD HTML
+// ============================================================
+function buildCard(role) {
+  const state = roleStates[role.id];
+  const full = isFull(role);
+  const isPrefilled = !!role.prefilled;
+  const spots = role.spots || 1;
+  const left = spots - (state?.filled || 0);
+
+  const cls = ['card',
+    role.leadership ? 'leadership' : '',
+    full && !isPrefilled ? 'filled' : '',
+    isPrefilled ? 'prefilled' : ''
+  ].filter(Boolean).join(' ');
+
+  const badgeTxt = isPrefilled ? '★ Role Filled'
+    : role.leadership
+      ? (full ? '★ Leadership — Filled' : '★ Leadership Role')
+      : (full ? 'Filled' : 'Open');
+  const badgeCls = isPrefilled ? 'card-badge badge-leadership-filled'
+    : role.leadership
+      ? (full ? 'card-badge badge-leadership-filled' : 'card-badge badge-leadership')
+      : (full ? 'card-badge badge-filled' : 'card-badge badge-open');
+
+  const spotsHtml = spots > 1
+    ? `<p class="time-tag" style="margin-top:5px"><strong style="color:#7C3AED">${full ? `${spots}/${spots}` : `${left} of ${spots}`} spots ${full ? 'filled' : 'open'}</strong></p>`
+    : '';
+  const namesHtml = state?.names?.length
+    ? `<p class="filled-by">✔ ${state.names.slice(0,3).join(', ')}${state.names.length > 3 ? ` +${state.names.length-3}` : ''}</p>`
+    : '';
+  const clickable = !full && !isPrefilled;
+
+  return `
+    <div class="${cls}" id="card-${role.id}" onclick="${clickable ? `openModal('${role.id}')` : ''}">
+      ${full || isPrefilled ? '<div class="card-check">✓</div>' : ''}
+      <span class="${badgeCls}">${badgeTxt}</span>
+      <h3>${role.name}</h3>
+      <p class="subtitle">${role.subtitle}</p>
+      <p class="time-tag"><strong>Time:</strong> ${role.time}</p>
+      ${spotsHtml}
+      ${namesHtml}
+    </div>`;
+}
+
+// ============================================================
+// RENDER GRID — split into sections
+// ============================================================
+function renderGrid() {
+  const knownIds = new Set([...COMMITTEE_IDS, ...PROGRAM_LEADER_IDS, ...TRAIL_GUIDE_IDS]);
+  const committee = ROLES.filter(r => COMMITTEE_IDS.includes(r.id));
+  const programLeaders = ROLES.filter(r => PROGRAM_LEADER_IDS.includes(r.id));
+  const trailGuides = ROLES.filter(r => TRAIL_GUIDE_IDS.includes(r.id));
+  const support = ROLES.filter(r => !knownIds.has(r.id));
+
+  document.getElementById('role-grid-committee').innerHTML = committee.map(buildCard).join('');
+  document.getElementById('role-grid-program-leaders').innerHTML = programLeaders.map(buildCard).join('');
+  document.getElementById('role-grid-trail-guides').innerHTML = trailGuides.map(buildCard).join('');
+  document.getElementById('role-grid-support').innerHTML = support.map(buildCard).join('');
+  updateProgress();
+}
+
+function updateProgress() {
+  const filled = filledSpots();
+  const total = totalSpots();
+  document.getElementById('filled-count').textContent = filled;
+  document.getElementById('total-count').textContent = total;
+  document.getElementById('bar-fill').style.width = `${total > 0 ? (filled / total) * 100 : 0}%`;
+}
+
+// ============================================================
+// MODAL
+// ============================================================
+function openModal(roleId) {
+  const role = ROLES.find(r => r.id === roleId);
+  if (!role) return;
+  currentRoleId = roleId;
+
+  const header = document.getElementById('modal-header');
+  header.className = 'modal-header' + (role.leadership ? ' gold' : '');
+  document.getElementById('modal-badge-label').textContent = role.leadership ? '★ Leadership Role' : 'Volunteer Role';
+  document.getElementById('modal-title').textContent = role.name;
+  document.getElementById('modal-scripture').textContent = role.scripture;
+  document.getElementById('modal-time').textContent = role.time;
+  document.getElementById('modal-reports').textContent = role.reportsTo;
+  document.getElementById('modal-desc').textContent = role.desc;
+  document.getElementById('modal-success').innerHTML = role.success.map(s => `<li>${s}</li>`).join('');
+  document.getElementById('modal-not').innerHTML = role.notThis.map(n => `<li class="not-item">${n}</li>`).join('');
+
+  const btnCta = document.getElementById('btn-cta');
+  btnCta.className = 'btn-primary' + (role.leadership ? ' gold-btn' : '');
+
+  document.getElementById('commit-role-name').textContent = role.name;
+  document.getElementById('commit-box').className = 'commitment-box' + (role.leadership ? ' gold' : '');
+  document.getElementById('commit-label').className = 'commit-label' + (role.leadership ? ' gold' : '');
+
+  // Reset
+  showStep('cta');
+  document.getElementById('input-name').value = '';
+  document.getElementById('input-email').value = '';
+  document.getElementById('input-phone').value = '';
+  document.getElementById('agree-check').checked = false;
+  document.getElementById('btn-submit').disabled = true;
+  document.getElementById('btn-submit').className = 'btn-primary' + (role.leadership ? ' gold-btn' : '');
+
+  document.getElementById('overlay').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('overlay').classList.remove('open');
+  document.body.style.overflow = '';
+  currentRoleId = null;
+}
+
+function showStep(name) {
+  ['cta', 'form', 'success'].forEach(s => {
+    document.getElementById('step-' + s).className = 'step' + (s === name ? ' active' : '');
+  });
+}
+
+function showForm() { showStep('form'); }
+
+function validateForm() {
+  const name = document.getElementById('input-name').value.trim();
+  const email = document.getElementById('input-email').value.trim();
+  const agreed = document.getElementById('agree-check').checked;
+  document.getElementById('btn-submit').disabled = !(name && email && agreed);
+}
+
+function submitSignup() {
+  const name = document.getElementById('input-name').value.trim();
+  const email = document.getElementById('input-email').value.trim();
+  const phone = document.getElementById('input-phone').value.trim();
+  if (!name || !email) return;
+
+  const btn = document.getElementById('btn-submit');
+  btn.textContent = 'Submitting…';
+  btn.disabled = true;
+
+  // Optimistic local update
+  const role = ROLES.find(r => r.id === currentRoleId);
+  const spots = role?.spots || 1;
+  const st = roleStates[currentRoleId];
+  st.filled = Math.min((st.filled || 0) + 1, spots);
+  st.names = [...(st.names || []), name];
+  st.status = st.filled >= spots ? 'filled' : 'partial';
+  saveToLocal();
+  renderGrid();
+  const card = document.getElementById('card-' + currentRoleId);
+  if (card) card.classList.add('pulse');
+
+  // Send to backend (no-cors because Apps Script requires it)
+  if (SCRIPT_URL !== 'YOUR_APPS_SCRIPT_URL_HERE') {
+    fetch(SCRIPT_URL, {
+      method: 'POST',
+      mode: 'no-cors',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ action: 'signup', roleId: currentRoleId, name, email, phone, type: 'adult' })
+    }).catch(() => {});
+  }
+
+  showStep('success');
+  setTimeout(() => closeModal(), 2800);
+}
+
+// Close on backdrop click
+document.getElementById('overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ============================================================
+// LIVE POLLING (every 5 seconds)
+// ============================================================
+function fetchUpdates() {
+  if (SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
+  fetch(SCRIPT_URL + '?action=getRoles&type=adult')
+    .then(r => r.json())
+    .then(data => {
+      if (!data?.roles) return;
+      data.roles.forEach(item => {
+        if (roleStates[item.id] !== undefined) {
+          roleStates[item.id] = { status: item.status, filled: item.filled || 0, names: item.names || [] };
+        }
+      });
+      saveToLocal();
+      renderGrid();
+    })
+    .catch(() => {});
+}
+
+// ============================================================
+// QR CODES — generated client-side via qrcodejs (no API needed)
+// ============================================================
+function buildQRCodes() {
+  const selfUrl = window.location.href;
+  const siblingUrl = selfUrl.replace('2026-2027-Volunteer-Signup-Adults.html', '2026-2027-Volunteer-Signup-Youth.html');
+  // Wire nav link
+  const navLink = document.getElementById('youth-link');
+  if (navLink) navLink.href = siblingUrl;
+  // QR codes
+  const opts = { width: 110, height: 110, colorDark: '#1B4D3E', colorLight: '#ffffff', correctLevel: QRCode.CorrectLevel.M };
+  new QRCode(document.getElementById('qr-self'), Object.assign({}, opts, { text: selfUrl }));
+  new QRCode(document.getElementById('qr-youth'), Object.assign({}, opts, { text: siblingUrl }));
+}
+
+// Init
+renderGrid();
+fetchUpdates();
+setInterval(fetchUpdates, 5000);
+buildQRCodes();
+
+// Update modal openModal to block prefilled roles
+const _origOpenModal = openModal;
+openModal = function(roleId) {
+  const role = ROLES.find(r => r.id === roleId);
+  if (!role || role.prefilled) return;
+  _origOpenModal(roleId);
+};
+</script>
+</body>
+</html>

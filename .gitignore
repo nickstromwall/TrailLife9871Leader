@@ -1,0 +1,24 @@
+# macOS
+.DS_Store
+.AppleDouble
+.LSOverride
+
+# LibreOffice / Excel lock files
+.~lock.*
+
+# Roster files — contain minor names and parent contact info, keep off GitHub
+*.xlsx
+*.xls
+*.csv
+
+# Internal context and AI working files
+_context/
+CLAUDE.md
+
+# PDFs with internal meeting content
+*.pdf
+
+# Editor / OS artifacts
+Thumbs.db
+*.swp
+*.swo
