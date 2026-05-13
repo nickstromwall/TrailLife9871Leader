@@ -1,45 +1,26 @@
-# Trail Life MN-9871 — Volunteer Signup Site
+# Trail Life MN-9871 Tools
 
-Volunteer role signup pages for **Trail Life USA Troop MN-9871** (2026–2027 season), hosted at [sage-quokka-8ec1bb.netlify.app](https://sage-quokka-8ec1bb.netlify.app).
+Software for **Trail Life USA Troop MN-9871** (The North Church / BBC North).
 
-## What's here
+This repo houses two related projects:
 
-| File | Purpose |
-|------|---------|
-| `2026-2027-Volunteer-Signup-Adults.html` | Adult volunteer role signup page |
-| `2026-2027-Volunteer-Signup-Youth.html` | Youth leadership role signup page |
-| `google-apps-script.gs` | Google Apps Script backend (reads/writes to Google Sheets) |
-| `VOLUNTEER-SIGNUP-SETUP.md` | Step-by-step setup guide for the Apps Script backend |
+| Directory | What it is | Status |
+|---|---|---|
+| [`signup-static/`](./signup-static) | Self-contained HTML pages + Google Apps Script backend for the 2026–2027 volunteer leadership signup. The original tool. | In use for the May 2026 leadership meeting. |
+| [`app/`](./app) | Next.js + Supabase application — generalized event signup platform for the troop (leadership, campouts, work days, etc.). Future home of everything `signup-static/` does plus more. | Under construction. |
 
-## How it works
+## How the two relate
 
-- Both HTML pages are fully self-contained (no build step, no npm).
-- They call a Google Apps Script web app to read role status and record signups.
-- Signups are written to a Google Sheet with three tabs: Adult Roles, Youth Roles, Signups Log.
-- The shared Google Sheet is the source of truth — every device polls it every 5 seconds, so signups made on one phone show up on every other device.
-- localStorage is a per-device cache: it keeps the last-seen state available offline on the same browser, but it does **not** sync across devices and is wiped if the page is opened from a different origin (e.g., a new Netlify subdomain) or in a private/incognito tab.
-- Each page shows a connection indicator: green "Live" when the backend is reachable, yellow "Local only" when the backend URL has not been wired up, red "Offline" when the network fails.
-- Pages cross-link to each other (adults ↔ youth).
+`signup-static/` is the launchpad — a single-purpose tool built for one specific meeting. It ships fast, runs on Google's free tier, and is the right answer for the immediate need.
 
-## Setup (first time)
+`app/` is the long-term home — a real app where any leader can create new signup events without touching code. Once it's at feature parity for the leadership signup, the static version gets archived.
 
-See `VOLUNTEER-SIGNUP-SETUP.md` for the full walkthrough. The short version:
+Both can run in parallel during the transition.
 
-1. Open `google-apps-script.gs` in the Apps Script editor and run `initializeSheet` once.
-2. Deploy as a Web App (Execute as: Me, Who has access: Anyone).
-3. Copy the deployment URL into both HTML files where it says `YOUR_APPS_SCRIPT_URL_HERE`.
-4. Upload both HTML files to Netlify (drag and drop at netlify.com/drop).
+## Working on this repo
 
-## Hosting
-
-Currently deployed via Netlify Drop. To update, drag both HTML files to [app.netlify.com/drop](https://app.netlify.com/drop) and it will replace the existing deploy.
-
-## Contributing
-
-- All code lives in the two HTML files and the `.gs` backend — no framework, no build step.
-- Test changes locally by opening the HTML file in a browser.
-- The `SCRIPT_URL` constant at the top of each HTML file must point to a live Apps Script deployment for live data to load.
-- If the Apps Script URL is not set, the page falls back to localStorage only.
+- The static project is plain HTML and a `.gs` file — no build step. Open the HTML files in a browser to test. See `signup-static/README.md` and `signup-static/VOLUNTEER-SIGNUP-SETUP.md` for the deployment workflow.
+- The app project is a normal Node/Next.js codebase. See `app/README.md` for setup.
 
 ## Troop contact
 

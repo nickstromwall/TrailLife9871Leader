@@ -1,0 +1,17 @@
+@import "tailwindcss";
+
+@theme inline {
+  --color-tl-green-dark: #1b4d3e;
+  --color-tl-green-mid: #2d6a4f;
+  --color-tl-green-light: #52b788;
+  --color-tl-gold: #c9a227;
+  --color-tl-gold-light: #fef3c7;
+  --color-tl-gold-border: #d4a017;
+  --font-sans: var(--font-geist-sans);
+  --font-mono: var(--font-geist-mono);
+}
+
+body {
+  font-family: var(--font-sans), -apple-system, BlinkMacSystemFont, "Segoe UI",
+    Roboto, sans-serif;
+}
