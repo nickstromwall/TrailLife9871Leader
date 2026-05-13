@@ -39,6 +39,8 @@
     .bar-fill { background: var(--gold); height: 100%; border-radius: 999px; transition: width 0.6s ease; width: 0%; }
     .live-indicator { display: inline-flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.8); font-size: 0.75rem; margin-top: 6px; }
     .live-dot { width: 7px; height: 7px; background: #6EE7B7; border-radius: 50%; animation: blink 2s infinite; }
+    .live-indicator.is-local .live-dot { background: #FCD34D; animation: none; }
+    .live-indicator.is-offline .live-dot { background: #F87171; animation: none; }
     @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     /* PAGE NAV */
@@ -181,7 +183,7 @@
 <div class="progress-bar">
   <div class="progress-count"><span id="filled-count">0</span> of <span id="total-count">0</span> spots filled</div>
   <div class="bar-track"><div class="bar-fill" id="bar-fill"></div></div>
-  <div class="live-indicator"><span class="live-dot"></span> Live &mdash; updates every 5 seconds</div>
+  <div class="live-indicator" id="sync-indicator"><span class="live-dot"></span><span id="sync-label">Connecting&hellip;</span></div>
 </div>
 
 <div class="section-label">Leadership Positions</div>
@@ -516,6 +518,22 @@
     try { localStorage.setItem(LOCAL_KEY, JSON.stringify(roleStates)); } catch(e) {}
   }
 
+  function setSyncStatus(state) {
+    const el = document.getElementById('sync-indicator');
+    const label = document.getElementById('sync-label');
+    if (!el || !label) return;
+    el.classList.remove('is-local', 'is-offline');
+    if (state === 'live') {
+      label.textContent = 'Live — updates every 5 seconds';
+    } else if (state === 'local') {
+      el.classList.add('is-local');
+      label.textContent = 'Local only — backend not connected';
+    } else if (state === 'offline') {
+      el.classList.add('is-offline');
+      label.textContent = 'Offline — showing last known state';
+    }
+  }
+
   function loadFromLocal() {
     try {
       const raw = localStorage.getItem(LOCAL_KEY);
@@ -759,24 +777,34 @@
   }
 
   function fetchUpdates() {
-    if (SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
+    if (SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+      setSyncStatus('local');
+      return;
+    }
     fetch(SCRIPT_URL + '?action=getRoles&type=youth')
       .then(r => r.json())
       .then(data => {
         if (!data || !data.roles) return;
         data.roles.forEach(item => {
-          if (roleStates[item.id] !== undefined) {
-            roleStates[item.id] = {
-              status: item.status,
-              filled: item.filled || 0,
-              names: item.names || [],
-            };
-          }
+          if (roleStates[item.id] === undefined) return;
+          const role = ROLES.find(r => r.id === item.id);
+          const spots = role ? (role.spots || 1) : Math.max(item.filled || 1, 1);
+          const serverNames = item.names || [];
+          const seen = new Set(serverNames.map(n => n.toLowerCase()));
+          const localOptimistic = (roleStates[item.id].names || []).filter(n => !seen.has(n.toLowerCase()));
+          const mergedNames = serverNames.concat(localOptimistic);
+          const filled = Math.min(mergedNames.length, spots);
+          roleStates[item.id] = {
+            filled: filled,
+            names: mergedNames,
+            status: filled >= spots ? 'filled' : (filled > 0 ? 'partial' : 'open'),
+          };
         });
         saveToLocal();
         renderGrids();
+        setSyncStatus('live');
       })
-      .catch(() => {});
+      .catch(() => { setSyncStatus('offline'); });
   }
 
   // QR codes
@@ -794,6 +822,7 @@
 
   // Initial render
   renderGrids();
+  fetchUpdates();
   setInterval(fetchUpdates, 5000);
   buildQRCodes();
 </script>

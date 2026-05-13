@@ -7,8 +7,8 @@ Trail Life MN-9871 | 2026-2027 Season
 
 Three files in the Trail Life project folder:
 
-- `2026-2027-Volunteer-Signup-Adults.html` — adult roles page (20 roles)
-- `2026-2027-Volunteer-Signup-Youth.html` — youth leadership roles page (9 roles, 25 total spots)
+- `2026-2027-Volunteer-Signup-Adults.html` — adult roles page (41 roles, 53 total spots; Troopmaster prefilled with Nick Stromwall)
+- `2026-2027-Volunteer-Signup-Youth.html` — youth leadership roles page (11 roles, 31 total spots)
 - `google-apps-script.gs` — Google Apps Script backend (shared by both pages)
 
 **Tonight (Google Sheets + Apps Script):** works in about 5 minutes. Dads sign up, data lands in a Google Sheet you can see live.
@@ -40,7 +40,7 @@ Three files in the Trail Life project folder:
 1. In the Apps Script editor, use the function dropdown (top center) to select `initializeSheet`.
 2. Click **Run**.
 3. The first time, Google will ask for permissions — click through and allow.
-4. You should see log output: "Sheets initialized. Adult roles: 20, Youth roles: 9."
+4. You should see log output similar to: "Sheets initialized. Adult roles: 41 (53 seats), Youth roles: 11 (31 seats)."
 5. Go back to your Google Sheet — you will now see three tabs: `Adult Roles`, `Youth Roles`, and `Signups Log`.
 
 ---

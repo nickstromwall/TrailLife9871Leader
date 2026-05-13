@@ -22,3 +22,5 @@ CLAUDE.md
 Thumbs.db
 *.swp
 *.swo
+.idea/
+.vscode/
