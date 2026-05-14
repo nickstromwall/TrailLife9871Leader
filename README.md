@@ -16,7 +16,9 @@ Volunteer role signup pages for **Trail Life USA Troop MN-9871** (2026–2027 se
 - Both HTML pages are fully self-contained (no build step, no npm).
 - They call a Google Apps Script web app to read role status and record signups.
 - Signups are written to a Google Sheet with three tabs: Adult Roles, Youth Roles, Signups Log.
-- localStorage keeps signups visible on the same device between refreshes.
+- The shared Google Sheet is the source of truth — every device polls it every 5 seconds, so signups made on one phone show up on every other device.
+- localStorage is a per-device cache: it keeps the last-seen state available offline on the same browser, but it does **not** sync across devices and is wiped if the page is opened from a different origin (e.g., a new Netlify subdomain) or in a private/incognito tab.
+- Each page shows a connection indicator: green "Live" when the backend is reachable, yellow "Local only" when the backend URL has not been wired up, red "Offline" when the network fails.
 - Pages cross-link to each other (adults ↔ youth).
 
 ## Setup (first time)

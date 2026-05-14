@@ -38,6 +38,8 @@
     .bar-fill { background: var(--gold); height: 100%; border-radius: 999px; transition: width 0.6s ease; width: 0%; }
     .live-indicator { display: inline-flex; align-items: center; gap: 5px; color: rgba(255,255,255,0.8); font-size: 0.75rem; margin-top: 6px; }
     .live-dot { width: 7px; height: 7px; background: #6EE7B7; border-radius: 50%; animation: blink 2s infinite; }
+    .live-indicator.is-local .live-dot { background: #FCD34D; animation: none; }
+    .live-indicator.is-offline .live-dot { background: #F87171; animation: none; }
     @keyframes blink { 0%,100% { opacity: 1; } 50% { opacity: 0.3; } }
 
     /* PAGE NAV */
@@ -181,7 +183,7 @@
 <div class="progress-bar">
   <div class="progress-count"><span id="filled-count">0</span> of <span id="total-count">20</span> roles filled</div>
   <div class="bar-track"><div class="bar-fill" id="bar-fill"></div></div>
-  <div class="live-indicator"><span class="live-dot"></span> Live &mdash; updates every 5 seconds</div>
+  <div class="live-indicator" id="sync-indicator"><span class="live-dot"></span><span id="sync-label">Connecting&hellip;</span></div>
 </div>
 
 <div class="section-label">Committee Level Positions</div>
@@ -805,6 +807,22 @@ function saveToLocal() {
   try { localStorage.setItem(LOCAL_KEY, JSON.stringify(roleStates)); } catch(e) {}
 }
 
+function setSyncStatus(state) {
+  const el = document.getElementById('sync-indicator');
+  const label = document.getElementById('sync-label');
+  if (!el || !label) return;
+  el.classList.remove('is-local', 'is-offline');
+  if (state === 'live') {
+    label.textContent = 'Live — updates every 5 seconds';
+  } else if (state === 'local') {
+    el.classList.add('is-local');
+    label.textContent = 'Local only — backend not connected';
+  } else if (state === 'offline') {
+    el.classList.add('is-offline');
+    label.textContent = 'Offline — showing last known state';
+  }
+}
+
 function loadFromLocal() {
   try {
     const raw = localStorage.getItem(LOCAL_KEY);
@@ -818,10 +836,19 @@ function loadFromLocal() {
 
 let roleStates = {};
 ROLES.forEach(r => { roleStates[r.id] = { status: 'open', filled: 0, names: [] }; });
-// Pre-fill Troopmaster — Nick Stromwall
-roleStates['troopmaster'] = { status: 'filled', filled: 1, names: ['Nick Stromwall'] };
-// Load any signups from previous session
+// Load any signups from previous session FIRST, then apply prefills so they always win.
 loadFromLocal();
+applyPrefills();
+
+// Permanently-filled roles. These override anything loaded from localStorage or
+// returned by the backend, so they cannot be silently wiped by a stale sheet row.
+function applyPrefills() {
+  ROLES.forEach(r => {
+    if (!r.prefilled) return;
+    const names = [r.prefilled];
+    roleStates[r.id] = { status: 'filled', filled: names.length, names: names };
+  });
+}
 let currentRoleId = null;
 
 function totalSpots() { return ROLES.filter(r => !r.prefilled).reduce((s, r) => s + (r.spots || 1), 0); }
@@ -1003,20 +1030,37 @@ document.getElementById('overlay').addEventListener('click', function(e) {
 // LIVE POLLING (every 5 seconds)
 // ============================================================
 function fetchUpdates() {
-  if (SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') return;
+  if (SCRIPT_URL === 'YOUR_APPS_SCRIPT_URL_HERE') {
+    setSyncStatus('local');
+    return;
+  }
   fetch(SCRIPT_URL + '?action=getRoles&type=adult')
     .then(r => r.json())
     .then(data => {
       if (!data?.roles) return;
       data.roles.forEach(item => {
-        if (roleStates[item.id] !== undefined) {
-          roleStates[item.id] = { status: item.status, filled: item.filled || 0, names: item.names || [] };
-        }
+        if (roleStates[item.id] === undefined) return;
+        // Merge server names with locally-optimistic names so a signup that
+        // hasn't been written to the sheet yet doesn't flicker back to "open".
+        const role = ROLES.find(r => r.id === item.id);
+        const spots = role ? (role.spots || 1) : Math.max(item.filled || 1, 1);
+        const serverNames = item.names || [];
+        const seen = new Set(serverNames.map(n => n.toLowerCase()));
+        const localOptimistic = (roleStates[item.id].names || []).filter(n => !seen.has(n.toLowerCase()));
+        const mergedNames = serverNames.concat(localOptimistic);
+        const filled = Math.min(mergedNames.length, spots);
+        roleStates[item.id] = {
+          filled: filled,
+          names: mergedNames,
+          status: filled >= spots ? 'filled' : (filled > 0 ? 'partial' : 'open'),
+        };
       });
+      applyPrefills();
       saveToLocal();
       renderGrid();
+      setSyncStatus('live');
     })
-    .catch(() => {});
+    .catch(() => { setSyncStatus('offline'); });
 }
 
 // ============================================================
